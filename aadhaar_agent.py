@@ -1,3 +1,34 @@
+"""
+Aadhaar Chat Agent - Main Orchestrator Module
+
+This module contains the main AadhaarChatAgent class that orchestrates all
+components of the system to provide a seamless conversational experience
+for Aadhaar-related queries.
+
+The agent integrates:
+- PDF processing for document ingestion
+- Vector database for semantic search
+- OpenAI chat for intelligent responses
+- Rich console for beautiful terminal UI
+
+Architecture:
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   PDF Files     │───▶│  Vector Database │───▶│  Chat Interface │
+│ (Supporting     │    │ (BGE + ChromaDB) │    │ (OpenAI + Rich) │
+│  Documents)     │    │                  │    │                 │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+
+Key Features:
+- Automatic PDF processing and indexing
+- Interactive chat loop with commands
+- Context-aware responses
+- Error handling and user guidance
+- Beautiful terminal interface
+
+Author: Avinav Mishra
+Repository: https://github.com/avinav86/Aadhar_Agent
+"""
+
 from pdf_processor import PDFProcessor
 from vector_db import VectorDatabase
 from openai_chat import OpenAIChat
@@ -8,7 +39,33 @@ import os
 from pathlib import Path
 
 class AadhaarChatAgent:
-    """Main conversational agent for Aadhaar-related questions"""
+    """
+    Main conversational agent orchestrator for Aadhaar-related questions.
+    
+    This class serves as the central coordinator that brings together all
+    components of the Aadhaar Chat Agent system. It manages the complete
+    workflow from PDF processing to response generation.
+    
+    Component Integration:
+    - PDFProcessor: Extracts text from Aadhaar PDF documents
+    - VectorDatabase: Stores and searches document embeddings
+    - OpenAIChat: Generates intelligent responses with context
+    - Rich Console: Provides beautiful terminal user interface
+    
+    Workflow:
+    1. Initialize all components
+    2. Process PDF documents (if not already done)
+    3. Create vector embeddings and store in database
+    4. Handle user queries through interactive chat loop
+    5. Search relevant documents and generate responses
+    
+    Attributes:
+        console (Console): Rich console for terminal output
+        pdf_processor (PDFProcessor): PDF text extraction handler
+        vector_db (VectorDatabase): Vector database for semantic search
+        chat (OpenAIChat): OpenAI integration for response generation
+        is_initialized (bool): Flag to track initialization status
+    """
     
     def __init__(self, pdf_directory: str = "Supporting Documents"):
         self.console = Console()

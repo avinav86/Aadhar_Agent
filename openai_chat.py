@@ -1,13 +1,60 @@
+"""
+OpenAI Chat Integration Module for Aadhaar Chat Agent
+
+This module provides sophisticated chat capabilities using OpenAI's GPT models
+with enhanced memory management and context retention. It integrates document
+context from the vector database with conversation history to provide coherent,
+contextual responses.
+
+Key Features:
+- OpenAI GPT-3.5-turbo integration
+- Enhanced conversation memory (20 exchanges + summaries)
+- Automatic conversation summarization
+- Strict document adherence with professional responses
+- Context-aware response generation
+- Memory management and cleanup
+
+Technical Implementation:
+- Conversation history: Last 20 exchanges (40 messages)
+- Summary generation: Every 20 exchanges using GPT-3.5-turbo
+- Context layers: System message → Summary → History → Current query
+- Response filtering: Strict adherence to provided documents
+
+Author: Avinav Mishra
+Repository: https://github.com/avinav86/Aadhar_Agent
+"""
+
 import openai
 from typing import List, Dict
 import os
 from dotenv import load_dotenv
 
 # Load environment variables from config.env file
+# This enables automatic API key loading from the configuration file
 load_dotenv('config.env')
 
 class OpenAIChat:
-    """Handles OpenAI LLM interactions for chat"""
+    """
+    Handles OpenAI LLM interactions with enhanced memory and context management.
+    
+    This class provides sophisticated chat capabilities that combine:
+    - Document context from vector database searches
+    - Conversation history with automatic summarization
+    - Strict adherence to provided Aadhaar documents
+    - Professional response formatting
+    
+    The system maintains conversation context through multiple layers:
+    1. System instructions for behavior and constraints
+    2. Conversation summaries for long-term context
+    3. Recent conversation history for immediate context
+    4. Current query with relevant document context
+    
+    Attributes:
+        client (openai.OpenAI): OpenAI API client instance
+        conversation_history (List[Dict]): Recent conversation messages
+        conversation_summary (str): Summary of older conversation context
+        topic_context (Dict): Additional context tracking for topics
+    """
     
     def __init__(self):
         self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
